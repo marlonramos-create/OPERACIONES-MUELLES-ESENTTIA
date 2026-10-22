@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programa de Citas y Asignación de Muelles - ESENTTIA | Serpomar</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0073FF;--magenta:#FF0041;--frio:#00B9FF;--negro:#000;--piedra:#D9D8D6;--bg:#F5F5F4;--card:#fff;--txt:#111;--mut:#6b6b6b;--ok:#12a150;--warn:#e69500;--card2:#fafafa;--line:#eee;--line2:#D9D8D6;--track:#eee}
+body.dark{--bg:#0f1318;--card:#1a1f27;--card2:#212733;--txt:#eceff4;--mut:#9aa3b2;--line:#2c333d;--line2:#3a424e;--track:#2c333d;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Lato',Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+.wrap{max-width:1280px;margin:0 auto;padding:16px}
+header.top{background:var(--card);border-radius:14px;padding:16px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;border-top:5px solid var(--azul);box-shadow:0 1px 3px #0001}
+.brand{display:flex;align-items:center;gap:10px}
+.brand b{font-size:30px;font-weight:900;letter-spacing:-1.5px}.brand small{display:block;letter-spacing:3px;font-size:10px;margin-top:-4px}
+.title{flex:1;min-width:260px}
+.title h1{margin:0;font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:-.3px;line-height:1.15}
+.meta{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:12px;margin-top:6px}.meta b{color:var(--txt)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0}.kpi small{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+.kpi{background:var(--card);border-radius:14px;padding:14px 16px;border-left:5px solid var(--c);box-shadow:0 1px 3px #0001}
+.kpi span{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);font-weight:700}
+.kpi strong{display:block;font-size:34px;font-weight:900;color:var(--c);line-height:1.1}
+.tools{background:var(--card);border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 1px 3px #0001}
+.tools .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+input,select,button{font:inherit;color:var(--txt)}
+input[type=date],input[type=search],select,.f input,.f select{border:1px solid var(--line2);border-radius:8px;padding:8px 10px;background:var(--card)}
+input[type=search]{min-width:230px}
+button{cursor:pointer;border:1px solid var(--line2);background:var(--card);border-radius:8px;padding:8px 12px;font-weight:700}
+button:hover{border-color:var(--azul);color:var(--azul)}
+button.pri{background:var(--azul);color:#fff;border-color:var(--azul)}button.pri:hover{background:#005ad1;color:#fff}
+.chip i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.chip b{margin-left:3px}.chip.on{background:var(--azul);color:#fff;border-color:var(--azul)}.chip.on:hover{color:#fff}
+.sumbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.sumbar .chip{padding:7px 12px;border-radius:20px;background:var(--card)}
+.dlabel{font-weight:900;font-size:15px;text-transform:capitalize;margin:16px 2px 6px}
+.bod{margin-top:14px}.bod h2{margin:0 0 8px;font-size:16px;font-weight:900;display:flex;align-items:center;gap:8px}
+.bod h2:before{content:"";width:6px;height:18px;background:linear-gradient(var(--azul),var(--magenta));border-radius:3px}
+.muelles{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.mu{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 1px 3px #0001;border-top:4px solid var(--piedra)}
+.mu.busy{border-top-color:var(--azul)}.mu.live{border-top-color:var(--frio)}
+.mu header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mu header b{font-size:15px;font-weight:900}.mu header span{font-size:12px;color:var(--mut)}
+.bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--track);margin-bottom:10px}
+.bar i{flex:1;border-right:1px solid var(--card)}.bar i.u{background:#FF8A00}.bar i.l{background:var(--frio)}.bar i.e{background:#7B2FF7}.bar i.f{background:#DCCBFF}.bar i.x{background:var(--piedra)}.bar i.x0{margin-left:6px}
+.bod h2 .xt{margin-left:auto;font-size:12px;font-weight:700;color:var(--mut)}.bod h2 .xt select{padding:4px 6px;margin-left:4px}.pxt{display:none;margin-left:auto;font-size:11px;font-weight:700}
+.it .a button[data-del]{color:var(--magenta);border-color:#ffc2d0}.it .a button[data-del]:hover{background:var(--magenta);color:#fff;border-color:var(--magenta)}
+.it .a select{padding:4px 6px;font-size:12px;border:1px solid var(--line2);border-radius:8px;background:var(--card);font-weight:700}
+.it{border:1px solid var(--line);border-left:4px solid var(--sc);border-radius:10px;padding:9px 10px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center}
+.it .h{font-weight:900;color:var(--azul);font-size:13px;white-space:nowrap}
+.it .p{font-weight:900;font-size:17px;letter-spacing:1px}
+.it .d{grid-column:2/4;font-size:12px;color:var(--mut)}.it .d b{color:var(--txt);font-weight:700}
+.st{font-size:11px;font-weight:900;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:var(--sc);color:#fff;white-space:nowrap}
+.it .a{grid-column:1/-1;display:flex;gap:6px;margin-top:4px}.it .a button{padding:4px 9px;font-size:12px}
+.ev{border-left-color:var(--piedra);background:var(--card2);opacity:.85;grid-template-columns:auto 1fr}.ev .p{font-size:12px;color:var(--mut);font-weight:700;letter-spacing:.5px}
+.empty{color:var(--mut);padding:10px;text-align:center;border:1px dashed var(--line2);border-radius:10px}
+.msg{background:var(--card);border-radius:14px;padding:30px;text-align:center;color:var(--mut);margin-top:14px}
+footer{margin-top:22px;background:var(--card);border-radius:14px;padding:16px 20px;font-size:11.5px;color:#555;border-top:5px solid var(--magenta)}
+footer b{color:#000}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin:8px 2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;background:var(--c)}
+dialog{background:var(--card);color:var(--txt);border:0;border-radius:14px;padding:0;width:min(460px,94vw);box-shadow:0 10px 40px #0005}
+dialog::backdrop{background:#0006}
+.f{padding:20px;display:grid;gap:10px}.f h3{margin:0 0 4px;font-weight:900}.f label{font-size:12px;font-weight:700;color:var(--mut);display:grid;gap:3px}
+.f .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.f .bt{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+.err{color:var(--magenta);font-weight:700;font-size:12px;min-height:14px}
+[hidden]{display:none!important}.mu header .add{padding:4px 9px;font-size:12px;background:var(--azul);color:#fff;border-color:var(--azul)}.mu header .add:hover{background:#005ad1;color:#fff}
+.ticks{display:flex;font-size:9px;font-weight:700;color:var(--mut);margin-bottom:2px}.ticks span{flex:2;border-left:1px solid var(--line2);padding-left:2px;line-height:10px}.ticks span.x0{margin-left:6px}
+.mu header{flex-wrap:wrap;gap:6px}.mu header .hb{display:flex;gap:6px}.mu header .blk{background:#444;border-color:#444}.mu header .blk:hover{background:#000;color:#fff}.bod h2 .gen{font-size:12px;padding:4px 9px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:99;max-width:92vw;text-align:center}#toast.show{opacity:1}
+.pfirmas,.pmeta{display:none}
+@media print{
+ @page{size:A4 landscape;margin:14mm 12mm 18mm}
+ body{background:var(--card);font-size:11px}.wrap{padding:0;max-width:none}
+ .tools,.legend,.a,.noprint,header.top .meta{display:none!important}
+ header.top,.kpi,.mu,footer{box-shadow:none;border-radius:0}
+ header.top{border-top:0;border-bottom:2px solid #000;padding:0 0 8px}
+ .pmeta{display:flex;gap:16px;font-size:11px;margin-top:4px}
+ .pxt{display:inline!important}.kpis{grid-template-columns:repeat(6,1fr);margin:8px 0}.kpi{padding:6px 10px;border:1px solid #ccc}.kpi strong{font-size:20px}
+ .muelles{grid-template-columns:repeat(2,1fr)}.mu,.bod{break-inside:avoid}
+ .it{padding:4px 8px;margin-bottom:3px}.it .p{font-size:13px}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .pfirmas{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:34px;break-inside:avoid}
+ .pfirmas div{border-top:1px solid #000;padding-top:4px;text-align:center;font-size:11px}
+ footer{position:static;border:0;border-top:1px solid #000;margin-top:14px;padding:8px 0 0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="brand">
+  <svg width="46" height="52" viewBox="0 0 90 108" aria-label="Serpomar"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0045FF"/><stop offset="1" stop-color="#00A0FF"/></linearGradient></defs>
+   <polygon points="14,24 86,2 86,26 14,48" fill="url(#g)"/><polygon points="14,48 52,36 86,47 52,58" fill="#00B9FF"/><polygon points="2,78 86,52 86,84 2,108" fill="#FF0041"/></svg>
+  <div><b>Serpomar</b><small>LOGÍSTICA</small></div>
+ </div>
+ <div class="title">
+  <h1>Programa de Citas y Asignación de Muelles – ESENTTIA</h1>
+  <div class="meta"><span>Código: <b>SERP-OPE-CIT-001</b></span><span>Versión: <b>1.0</b></span><span>Fecha de emisión: <b id="hoy"></b></span></div>
+  <div class="pmeta"><span>Fecha de operación: <b id="pfecha"></b></span><span>Impreso: <b id="pimp"></b></span></div>
+ </div>
+</header>
+
+<section class="kpis">
+ <div class="kpi" style="--c:var(--azul)"><span>Citas programadas</span><strong id="k1">0</strong><small id="k1s"></small></div>
+ <div class="kpi" style="--c:#F5B700"><span>Vehículos en espera</span><strong id="k2">0</strong></div>
+ <div class="kpi" style="--c:var(--frio)"><span>Citas en curso</span><strong id="k3">0</strong></div>
+ <div class="kpi" style="--c:var(--ok)"><span>Citas ejecutadas</span><strong id="k4">0</strong></div>
+ <div class="kpi" style="--c:#7B2FF7"><span>Ejecutadas con tiempo extra</span><strong id="k5">0</strong><small>Terminan después de 17:00</small></div>
+ <div class="kpi" style="--c:#FF8A00"><span>Muelles ocupados</span><strong id="k6">0</strong></div>
+</section>
+
+<section class="tools">
+ <div class="grp"><button id="prev">◀ Día anterior</button><input type="date" id="fecha"><button id="today">Hoy</button><button id="next">Día siguiente ▶</button></div>
+ <div class="grp"><select id="fmu"></select></div>
+ <div class="grp"><select id="fop"><option value="">Todas las operaciones</option><option>Exportación</option><option>Orden de traída</option><option>Cargue nacional</option><option>Traslado</option><option>Devolución</option></select></div>
+ <div class="grp"><input type="search" id="q" placeholder="Buscar placa, conductor o N.º cita / remisión"></div>
+  <div class="grp" style="margin-left:auto"><button id="nuevo" class="pri" style="background:var(--magenta);border-color:var(--magenta)">＋ Nueva cita / operación</button><button id="theme">🌙 Modo oscuro</button><button id="reset" title="Borra los cambios guardados y recarga el Excel original">↺ Restablecer</button><button class="pri" id="print">🖨 Imprimir programación del día</button></div>
+</section>
+
+<section class="sumbar" id="chips"></section>
+<div class="dlabel" id="dlabel"></div>
+<div class="legend noprint"><span style="--c:#FF8A00"><i></i>Muelle ocupado</span><span style="--c:var(--frio)"><i></i>Hora libre</span><span style="--c:#7B2FF7"><i></i>Tiempo extra ocupado (después de 17:00)</span><span style="--c:#DCCBFF"><i></i>Tiempo extra autorizado libre</span><span style="--c:var(--piedra)"><i></i>Almuerzo / bloqueo / otras operaciones</span></div>
+<main id="board"></main>
+
+<div class="pfirmas"><div>Elaboró – Coordinación Operativa Serpomar</div><div>Revisó – Supervisor de Muelles</div><div>Recibió – ESENTTIA</div></div>
+
+<footer>
+ <b>Serpomar Logística</b> · Km 6, Cl Parquiamerica, Mz D, Bodega 4, Mamonal, Cartagena, Colombia · T (+57 5) 660 6556 · www.serpomar.com<br>
+ <span>Este documento es privilegiado y confidencial. Puede contener información de propiedad exclusiva de Serpomar y estar amparada por el secreto profesional. Cualquier divulgación, distribución, reproducción o copiado está estrictamente prohibida. / This document is privileged and confidential and the exclusive property of Serpomar; any disclosure, distribution or copying is strictly prohibited.</span>
+</footer>
+</div>
+
+<dialog id="dlg"><form class="f" method="dialog" id="frm" onsubmit="return false">
+ <h3 id="dt"></h3><div id="dsub" style="font-size:13px;color:var(--mut)"></div>
+ <div class="row"><label>Tipo de registro<select id="ek"><option value="c">Cita / operación de vehículo (placa opcional)</option><option value="o">Almuerzo / bloqueo / mantenimiento del muelle</option></select></label>
+ <label id="lp">Placa (opcional)<input id="epl" maxlength="6" placeholder="Vacío = por asignar" style="text-transform:uppercase"></label>
+ <label id="lo" hidden>Operación<select id="eo"></select></label></div>
+ <div class="row"><label>Hora de inicio<select id="eh"></select></label><label>Duración<select id="ed"></select></label></div>
+ <div class="row"><label>Bodega<select id="eb"></select></label><label>Muelle<select id="em"></select></label></div>
+ <div id="cf" style="display:grid;gap:10px">
+ <label>Operación del vehículo<select id="eop"><option value="">Sin definir</option><option>Exportación</option><option>Orden de traída</option><option>Cargue nacional</option><option>Traslado</option><option>Devolución</option></select></label>
+ <label>Conductor<input id="ec" placeholder="Nombre del conductor"></label>
+ <div class="row"><label>Tipo de vehículo<select id="et"><option>Tractocamión</option><option>Camión sencillo</option><option>Turbo</option><option>Contenedor</option><option>Sin registrar</option></select></label>
+ <label>Estado<select id="es"><option value="">Automático (según hora)</option><option>Programado</option><option>En espera</option><option>En curso</option><option>Reprogramado</option><option>Rechazado</option><option>Finalizado</option></select></label></div>
+ <label>Cliente / Producto / Remisión<input id="ep" placeholder="Ej. ESENTTIA – Polietileno / Remisión 12345"></label></div>
+ <div class="err" id="err"></div>
+ <div class="bt"><button type="button" id="dl" style="margin-right:auto;color:var(--magenta);border-color:#ffc2d0">🗑 Eliminar</button><button type="button" id="cx">Cancelar</button><button type="button" class="pri" id="sv">Guardar</button></div>
+</form></dialog>
+<dialog id="ask"><div class="f"><h3 id="aq" style="font-size:15px"></h3><div class="bt"><button type="button" id="an">Cancelar</button><button type="button" class="pri" id="ay">Aceptar</button></div></div></dialog>
+<dialog id="dlgL"><div class="f"><h3>🍽 Almuerzo / bloqueo por bodega</h3><div style="font-size:12px;color:var(--mut)" id="lsub"></div>
+ <label>Operación<select id="la"></select></label>
+ <div class="row"><label>Aplicar a<select id="lw"><option value="b">Esta bodega</option><option value="all">Todas las bodegas</option></select></label><label>Muelles<select id="lm"><option value="0">Ambos muelles</option><option value="1">Solo Muelle 1</option><option value="2">Solo Muelle 2</option></select></label></div>
+ <div class="row"><label>Hora de inicio<select id="lh"></select></label><label>Duración<select id="ld"></select></label></div>
+ <div class="err" id="lerr"></div><div class="bt"><button type="button" id="lx">Cancelar</button><button type="button" class="pri" id="ls">Aplicar</button></div></div></dialog>
+<div id="toast"></div>
+
+<script>
+const RAW={"2026-10-15":[["6008",1,8,1,"UZN328"],["6008",1,10,1,"THK672"],["6008",1,11,1,"QZS020"],["6008",1,12,1,"ALMUERZO"],["6008",1,13,1,"GQV192"],["6008",1,15,1,"GQV192"],["6008",2,10,2,"EXPORTACIÓN"],["6008",2,12,1,"ALMUERZO"],["6008",2,13,2,"EXPORTACIÓN"],["6008",2,15,2,"EXPORTACIÓN"],["6007",1,9,3,"WFL771"],["6007",1,12,1,"ALMUERZO"],["6007",1,13,1,"ORDEN DE TRAIDA"],["6007",1,14,1,"ORDEN DE TRAIDA"],["6007",2,8,1,"BLOQUEADO"],["6007",2,9,1,"BLOQUEADO"],["6007",2,10,1,"BLOQUEADO"],["6007",2,11,1,"BLOQUEADO"],["6007",2,12,1,"ALMUERZO"],["6007",2,13,1,"BLOQUEADO"],["6007",2,14,1,"BLOQUEADO"],["6007",2,15,1,"BLOQUEADO"],["6007",2,16,1,"BLOQUEADO"],["6007",2,17,1,"BLOQUEADO"],["6009",1,12,1,"ALMUERZO"],["6009",1,14,1,"SNY680"],["6009",2,8,1,"BLOQUEADO"],["6009",2,9,1,"BLOQUEADO"],["6009",2,10,1,"BLOQUEADO"],["6009",2,11,1,"BLOQUEADO"],["6009",2,12,1,"ALMUERZO"],["6009",2,13,1,"BLOQUEADO"],["6009",2,14,1,"BLOQUEADO"],["6009",2,15,1,"BLOQUEADO"],["6009",2,16,1,"BLOQUEADO"],["6009",2,17,1,"BLOQUEADO"],["6003",1,8,1,"TRASLADO"],["6003",1,12,1,"ALMUERZO"],["6003",1,14,2,"SXU728"],["6003",2,12,1,"ALMUERZO"],["6003",2,15,2,"STX938"]],"2026-10-16":[["6008",1,12,1,"ALMUERZO"],["6008",1,13,1,"LJV559"],["6008",1,14,1,"ORDEN DE TRAIDA"],["6008",2,12,1,"ALMUERZO"],["6008",2,13,2,"EXPORTACIÓN"],["6008",2,15,2,"EXPORTACIÓN"],["6007",1,8,3,"TVA998"],["6007",1,12,1,"ALMUERZO"],["6007",2,8,1,"BLOQUEADO"],["6007",2,9,1,"BLOQUEADO"],["6007",2,10,1,"BLOQUEADO"],["6007",2,11,1,"BLOQUEADO"],["6007",2,12,1,"ALMUERZO"],["6007",2,13,1,"BLOQUEADO"],["6007",2,14,1,"BLOQUEADO"],["6007",2,15,1,"BLOQUEADO"],["6007",2,16,1,"BLOQUEADO"],["6007",2,17,1,"BLOQUEADO"],["6009",1,12,1,"ALMUERZO"],["6009",1,14,1,"ORDEN DE TRAIDA"],["6009",1,15,1,"TEO369"],["6009",2,8,1,"BLOQUEADO"],["6009",2,9,1,"BLOQUEADO"],["6009",2,10,1,"BLOQUEADO"],["6009",2,11,1,"BLOQUEADO"],["6009",2,12,1,"ALMUERZO"],["6009",2,13,1,"BLOQUEADO"],["6009",2,14,1,"BLOQUEADO"],["6009",2,15,1,"BLOQUEADO"],["6009",2,16,1,"BLOQUEADO"],["6009",2,17,1,"BLOQUEADO"],["6003",1,11,1,"TTY885"],["6003",1,12,1,"ALMUERZO"],["6003",2,12,1,"ALMUERZO"],["INTE",1,10,1,"ORDEN DE TRAIDA"],["INTE",1,11,1,"ORDEN DE TRAIDA"],["INTE",1,12,1,"ALMUERZO"],["INTE",1,13,2,"SBV118"],["INTE",1,15,3,"LKK617"],["INTE",1,18,2,"SXW283"],["INTE",2,10,1,"STY571"],["INTE",2,12,1,"ALMUERZO"],["INTE",2,13,1,"XJB104"],["INTE",2,15,2,"WON361"],["INTE",2,18,3,"SNT885"],["E003",1,9,1,"SML892"],["E003",1,10,1,"NOS508"],["E003",1,12,1,"ALMUERZO"]],"2026-10-17":[["6008",1,11,1,"SPX497"],["6008",1,12,1,"ALMUERZO"],["6008",1,13,1,"SPX497"],["6008",1,14,2,"SMK182"],["6008",2,10,2,"EXPORTACIÓN"],["6008",2,12,1,"ALMUERZO"],["6008",2,13,2,"EXPORTACIÓN"],["6008",2,15,2,"EXPORTACIÓN"],["6007",1,9,3,"KNL084"],["6007",1,12,1,"ALMUERZO"],["6007",1,13,2,"SMB182"],["6007",1,15,1,"TRASLADO"],["6007",1,16,1,"TRASLADO"],["6007",1,17,1,"TRASLADO"],["6007",2,8,1,"BLOQUEADO"],["6007",2,9,1,"BLOQUEADO"],["6007",2,10,1,"BLOQUEADO"],["6007",2,11,1,"BLOQUEADO"],["6007",2,12,1,"ALMUERZO"],["6007",2,13,1,"BLOQUEADO"],["6007",2,14,1,"BLOQUEADO"],["6007",2,15,1,"BLOQUEADO"],["6007",2,16,1,"BLOQUEADO"],["6007",2,17,1,"BLOQUEADO"],["6007",2,18,1,"BLOQUEADO"],["6007",2,19,1,"BLOQUEADO"],["6007",2,20,1,"BLOQUEADO"],["6007",2,21,1,"BLOQUEADO"],["6009",1,9,2,"PVS727"],["6009",1,11,1,"WEO971"],["6009",1,12,1,"ALMUERZO"],["6009",1,13,2,"TRK436"],["6009",2,8,1,"BLOQUEADO"],["6009",2,9,1,"BLOQUEADO"],["6009",2,10,1,"BLOQUEADO"],["6009",2,11,1,"BLOQUEADO"],["6009",2,12,1,"ALMUERZO"],["6009",2,13,1,"BLOQUEADO"],["6009",2,14,1,"BLOQUEADO"],["6009",2,15,1,"BLOQUEADO"],["6009",2,16,1,"BLOQUEADO"],["6009",2,17,1,"BLOQUEADO"],["6009",2,18,1,"BLOQUEADO"],["6009",2,19,1,"BLOQUEADO"],["6009",2,20,1,"BLOQUEADO"],["6009",2,21,1,"BLOQUEADO"],["6003",1,9,1,"TRASLADO"],["6003",1,11,1,"TRASLADO"],["6003",1,12,1,"ALMUERZO"],["6003",1,13,1,"TRASLADO"],["6003",1,14,1,"TRASLADO"],["6003",1,15,1,"TRASLADO"],["6003",1,16,1,"TRASLADO"],["6003",1,17,1,"TRASLADO"],["6003",2,12,1,"ALMUERZO"],["INTE",1,8,2,"LKK617"],["INTE",1,10,1,"WEO971"],["INTE",1,11,1,"TFQ349"],["INTE",1,12,1,"ALMUERZO"],["INTE",1,13,2,"TFQ349"],["INTE",1,15,2,"WOM361"],["INTE",1,17,3,"GTW910"],["INTE",2,8,2,"THR628"],["INTE",2,10,1,"SMB182"],["INTE",2,11,1,"GDX553"],["INTE",2,12,1,"ALMUERZO"],["INTE",2,13,2,"ORDEN DE TRAIDA"],["INTE",2,15,2,"ORDEN DE TRAIDA"],["INTE",2,17,2,"ORDEN DE TRAIDA"],["E003",1,10,2,"TJW016"],["E003",1,12,1,"ALMUERZO"],["E003",1,14,1,"TRASLADO"],["E003",1,15,1,"TRASLADO"],["E003",1,16,1,"TRASLADO"],["E003",1,17,1,"TRASLADO"],["E003",1,18,1,"TRASLADO"]],"2026-10-19":[["6008",1,8,1,"TRASLADO"],["6008",1,9,3,"LCN505"],["6008",1,12,1,"ALMUERZO"],["6008",1,13,1,"SZQ049"],["6008",1,15,1,"TRASLADO"],["6008",1,16,1,"TRASLADO"],["6008",1,17,1,"TRASLADO"],["6008",1,18,1,"TRASLADO"],["6008",2,8,1,"TRASLADO"],["6008",2,9,1,"TRASLADO"],["6008",2,10,1,"SSQ159"],["6008",2,11,1,"KZV948"],["6008",2,12,1,"ALMUERZO"],["6008",2,13,1,"TRASLADO"],["6008",2,14,1,"LPY775"],["6008",2,15,1,"LPY775"],["6008",2,17,1,"LPY775"],["6007",1,12,1,"ALMUERZO"],["6007",1,13,1,"KSQ526"],["6007",1,14,1,"MYW924"],["6007",1,15,2,"SXS282"],["6007",1,17,1,"TRASLADO"],["6007",1,18,1,"TRASLADO"],["6007",1,19,1,"TRASLADO"],["6007",2,8,1,"BLOQUEADO"],["6007",2,9,1,"BLOQUEADO"],["6007",2,10,1,"BLOQUEADO"],["6007",2,11,1,"BLOQUEADO"],["6007",2,12,1,"ALMUERZO"],["6007",2,13,1,"BLOQUEADO"],["6007",2,14,1,"BLOQUEADO"],["6007",2,15,1,"BLOQUEADO"],["6007",2,16,1,"BLOQUEADO"],["6007",2,17,1,"BLOQUEADO"],["6007",2,18,1,"BLOQUEADO"],["6007",2,19,1,"BLOQUEADO"],["6007",2,20,1,"BLOQUEADO"],["6007",2,21,1,"BLOQUEADO"],["6009",1,8,1,"TRASLADO"],["6009",1,9,1,"TRASLADO"],["6009",1,10,2,"TEO360"],["6009",1,12,1,"ALMUERZO"],["6009",1,13,1,"JUE009"],["6009",1,14,2,"ZNN173"],["6009",1,16,3,"ZNL107"],["6009",2,8,1,"BLOQUEADO"],["6009",2,9,1,"BLOQUEADO"],["6009",2,10,1,"BLOQUEADO"],["6009",2,11,1,"BLOQUEADO"],["6009",2,12,1,"ALMUERZO"],["6009",2,13,1,"BLOQUEADO"],["6009",2,14,1,"BLOQUEADO"],["6009",2,15,1,"BLOQUEADO"],["6009",2,16,1,"BLOQUEADO"],["6009",2,17,1,"BLOQUEADO"],["6009",2,18,1,"BLOQUEADO"],["6009",2,19,1,"BLOQUEADO"],["6009",2,20,1,"BLOQUEADO"],["6009",2,21,1,"BLOQUEADO"],["6003",1,12,1,"ALMUERZO"],["6003",1,13,2,"PMT576"],["6003",1,15,1,"TRASLADO"],["6003",1,16,1,"TRASLADO"],["6003",1,17,1,"TRASLADO"],["6003",2,12,1,"ALMUERZO"],["INTE",1,8,1,"UAG792"],["INTE",1,9,1,"JUE009"],["INTE",1,10,2,"MYW924"],["INTE",1,12,1,"ALMUERZO"],["INTE",1,13,2,"O. TRAIDA"],["INTE",1,15,2,"O. TRAIDA"],["INTE",1,17,1,"JVM239"],["INTE",1,18,1,"LPN173"],["INTE",2,8,1,"TRASLADO"],["INTE",2,9,1,"WTO710"],["INTE",2,10,1,"PUO827"],["INTE",2,12,1,"ALMUERZO"],["INTE",2,13,2,"O. TRAIDA"],["INTE",2,15,2,"O. TRAIDA"],["INTE",2,17,1,"WLL196"],["E003",1,8,1,"TRASLADO"],["E003",1,9,1,"TRASLADO"],["E003",1,10,2,"WOT802"],["E003",1,12,1,"ALMUERZO"]],"2026-10-20":[["6008",1,8,1,"LPY775"],["6008",1,10,2,"POZ695"],["6008",1,12,1,"ALMUERZO"],["6008",1,13,2,"WOM562"],["6008",1,15,2,"SZN218"],["6008",1,17,1,"WFL771"],["6008",2,9,2,"EXPORTACIÓN"],["6008",2,11,1,"EXPORTACIÓN"],["6008",2,12,1,"ALMUERZO"],["6008",2,13,2,"EXPORTACIÓN"],["6008",2,15,2,"EXPORTACIÓN"],["6008",2,17,2,"EXPORTACIÓN"],["6007",1,10,1,"NYW924"],["6007",1,11,3,"TTR645"],["6007",2,8,1,"BLOQUEADO"],["6007",2,9,1,"BLOQUEADO"],["6007",2,10,1,"BLOQUEADO"],["6007",2,11,1,"BLOQUEADO"],["6007",2,12,1,"ALMUERZO"],["6007",2,13,1,"BLOQUEADO"],["6007",2,14,1,"BLOQUEADO"],["6007",2,15,1,"BLOQUEADO"],["6007",2,16,1,"BLOQUEADO"],["6007",2,17,1,"BLOQUEADO"],["6007",2,18,1,"BLOQUEADO"],["6007",2,19,1,"BLOQUEADO"],["6007",2,20,1,"BLOQUEADO"],["6007",2,21,1,"BLOQUEADO"],["6009",1,12,1,"ALMUERZO"],["6009",1,13,2,"SSW694"],["6009",1,15,2,"WFL771"],["6009",2,8,1,"BLOQUEADO"],["6009",2,9,1,"BLOQUEADO"],["6009",2,10,1,"BLOQUEADO"],["6009",2,11,1,"BLOQUEADO"],["6009",2,12,1,"ALMUERZO"],["6009",2,13,1,"BLOQUEADO"],["6009",2,14,1,"BLOQUEADO"],["6009",2,15,1,"BLOQUEADO"],["6009",2,16,1,"BLOQUEADO"],["6009",2,17,1,"BLOQUEADO"],["6009",2,18,1,"BLOQUEADO"],["6009",2,19,1,"BLOQUEADO"],["6009",2,20,1,"BLOQUEADO"],["6009",2,21,1,"BLOQUEADO"],["6003",1,12,1,"ALMUERZO"],["6003",2,12,1,"ALMUERZO"],["INTE",1,8,1,"POZ695"],["INTE",1,10,1,"ORDEN DE TRAIDA"],["INTE",1,12,1,"ALMUERZO"],["INTE",1,13,1,"WHM607"],["INTE",1,15,2,"KUL101"],["INTE",2,8,1,"MYW924"],["INTE",2,10,2,"WON459"],["INTE",2,12,1,"ALMUERZO"],["INTE",2,13,2,"WLB995"],["INTE",2,15,2,"NFQ620"],["E003",1,12,1,"ALMUERZO"]]};
+const BODS=['6003','6007','6008','6009','E003','INTE'],MUS=[1,2],H0=8,H1=22;
+const PLATE=/^[A-Z]{3}\d{3}$/;
+const ST={'Programado':'#0073FF','En espera':'#F5B700','En curso':'#00B9FF','Reprogramado':'#6b6b6b','Rechazado':'#FF0041','Finalizado':'#12a150'};
+const ESTADOS=Object.keys(ST),XS=17,NOOCC=['Rechazado','Reprogramado'];
+const OPS=['Exportación','Orden de traída','Cargue nacional','Traslado','Devolución'];
+const OPE=['ALMUERZO','BLOQUEADO','MANTENIMIENTO'];
+const OPMAP={'EXPORTACIÓN':'Exportación','ORDEN DE TRAIDA':'Orden de traída','CARGUE NACIONAL':'Cargue nacional','TRASLADO':'Traslado','DEVOLUCIÓN':'Devolución'};
+const MIG={Programada:'Programado','En Proceso':'En curso',Completada:'Finalizado',Cancelada:'Rechazado'};
+const DB={},EX={};
+for(const d in RAW){DB[d]=RAW[d].map((r,i)=>({id:`CIT-${d.replace(/-/g,'')}-${String(i+1).padStart(2,'0')}`,b:r[0],m:r[1],h:r[2],s:r[3],label:r[4],cita:PLATE.test(r[4]),cond:'',tipo:'Sin registrar',op:'',prod:'',man:''}))}
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const key=dt=>`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+const real=key(new Date());
+let cur=Object.keys(DB).sort().pop()||real, fest='Todas';
+$('hoy').textContent=new Date().toLocaleDateString('es-CO');
+const hh=h=>`${pad(Math.floor(h))}:${h%1?'30':'00'}`;
+const fn=n=>String(+n.toFixed(1)).replace('.',',');
+const occ=i=>!i.cita||!NOOCC.includes(i.man);
+const isExtra=i=>i.cita&&i.h+i.s>XS;
+const overlap=(i,b,m,h,s)=>i.b===b&&i.m===m&&i.h<h+s&&h<i.h+i.s&&occ(i);
+function estado(it,d){
+ if(it.man) return it.man;
+ if(d<real) return 'Finalizado'; if(d>real) return 'Programado';
+ const n=new Date(), x=n.getHours()+n.getMinutes()/60;
+ return x>=it.h+it.s?'Finalizado':x>=it.h?'En curso':'Programado';
+}
+function limite(d,b){
+ if(EX[d]&&EX[d][b]!=null)return EX[d][b];
+ let m=XS;(DB[d]||[]).forEach(i=>{if(i.b===b&&i.cita&&occ(i)&&i.h+i.s>m)m=i.h+i.s});return Math.min(m,H1);
+}
+function newId(d){let n=(DB[d]||[]).length+1,id;do{id=`CIT-${d.replace(/-/g,'')}-${String(n++).padStart(2,'0')}`}while(DB[d].some(i=>i.id===id));return id}
+function toast(m){const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),4000)}
+function ask(msg,ok){return new Promise(res=>{const d=$('ask');$('aq').textContent=msg;$('ay').textContent=ok||'Aceptar';
+ d.onclose=()=>res(false);$('ay').onclick=()=>{res(true);d.close()};$('an').onclick=()=>{res(false);d.close()};d.showModal()})}
+
+function render(){
+ const d=cur, all=DB[d]||[], q=$('q').value.trim().toLowerCase(), fm=$('fmu').value;
+ $('fecha').value=d;
+ const dt=new Date(d+'T12:00:00');
+ $('dlabel').textContent=dt.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+(d===real?' · HOY':'');
+ $('pfecha').textContent=$('dlabel').textContent; $('pimp').textContent=new Date().toLocaleString('es-CO');
+ const citas=all.filter(i=>i.cita), est=i=>estado(i,d), cnt=s=>citas.filter(i=>est(i)===s).length;
+ const fin=citas.filter(i=>est(i)==='Finalizado');
+ $('k1').textContent=citas.length;
+ $('k1s').textContent=`Pendientes ${cnt('Programado')} · Reprog. ${cnt('Reprogramado')} · Rechaz. ${cnt('Rechazado')}`;
+ $('k2').textContent=cnt('En espera');
+ $('k3').textContent=cnt('En curso');
+ $('k4').textContent=fin.length;
+ $('k5').textContent=fin.filter(isExtra).length;
+ $('k6').textContent=new Set(citas.filter(i=>occ(i)&&(d!==real||est(i)==='En curso')).map(i=>i.b+i.m)).size;
+ $('chips').innerHTML=[['Todas',citas.length],...ESTADOS.map(s=>[s,cnt(s)])].map(([n,c])=>`<button class="chip${fest===n?' on':''}" data-f="${n}"><i style="background:${ST[n]||'#999'}"></i>${n} <b>${c}</b></button>`).join('');
+ const b=$('board'); b.innerHTML='';
+ if(!all.length)b.innerHTML=`<div class="msg noprint" style="margin:0 0 4px">Sin programación cargada para esta fecha. Todos los muelles están libres: use <b>＋ Cita / operación</b> en cualquier muelle.</div>`;
+ for(const bod of BODS){
+  const mus=MUS.filter(m=>fm==='all'||fm===bod+'|'+m); if(!mus.length)continue;
+  const lim=limite(d,bod);
+  const opts=[17,18,19,20,21,22].map(v=>`<option value="${v}"${v===Math.ceil(lim)?' selected':''}>${v===XS?'Sin tiempo extra':hh(v)}</option>`).join('');
+  const sec=document.createElement('section');sec.className='bod';
+  sec.innerHTML=`<h2>Almacén / Bodega ${bod}<button class="gen noprint" data-gen="${bod}" title="Programar almuerzo o bloqueo en los muelles desde aquí">🍽 Almuerzo / bloqueo</button><label class="xt noprint">⏱ Tiempo extra autorizado hasta <select data-lim="${bod}">${opts}</select></label><span class="pxt">Tiempo extra autorizado: ${lim>XS?'hasta '+hh(lim):'no'}</span></h2><div class="muelles"></div>`;
+  const grid=sec.querySelector('.muelles');
+  for(const m of mus){
+   const items=all.filter(i=>i.b===bod&&i.m===m).sort((a,c)=>a.h-c.h);
+   const maxEnd=items.filter(i=>i.cita&&occ(i)).reduce((a,i)=>Math.max(a,i.h+i.s),0);
+   const top=Math.min(H1,Math.max(Math.ceil(lim),XS,Math.ceil(maxEnd))), slots=[];
+   for(let t=H0;t<top;t+=.5){const it=items.find(i=>t>=i.h&&t<i.h+i.s&&occ(i));const ex=t>=XS;slots.push([t,!it?(ex?'f':'l'):it.cita?(ex?'e':'u'):'x'])}
+   const usedH=slots.filter(x=>x[1]==='u'||x[1]==='e').length/2, extraH=slots.filter(x=>x[1]==='e').length/2, live=items.some(i=>i.cita&&est(i)==='En curso');
+   const ticks=[];for(let h=H0;h<top;h++)ticks.push(`<span${h===XS?' class="x0"':''}>${pad(h)}</span>`);
+   const vis=items.filter(i=>{
+     const e=est(i);
+     if(!i.cita) return fest==='Todas'&&!q&&!$('fop').value;
+     if(fest!=='Todas'&&fest!==e)return false;
+     if($('fop').value&&i.op!==$('fop').value)return false;
+     return !q||[i.label,i.cond,i.id,i.prod,i.op].some(v=>(v||'').toLowerCase().includes(q));
+   });
+   const mu=document.createElement('div');mu.className='mu'+(live?' live':usedH?' busy':'');
+   mu.innerHTML=`<header><b>Muelle ${m}</b><span>${items.filter(i=>i.cita).length} citas · ${fn(usedH)} h ocupadas${extraH?` · <b style="color:#7B2FF7">${fn(extraH)} h extra</b>`:''}${live?' · <b style="color:var(--frio)">● En curso</b>':''}</span><div class="hb noprint"><button class="add" data-add="${bod}|${m}">＋ Cita / operación</button><button class="add blk" data-blk="${bod}|${m}" title="Bloquear el muelle toda la jornada (${hh(H0)}–${hh(XS)})">🔒 Bloquear jornada</button></div></header><div class="ticks">${ticks.join('')}</div><div class="bar">${slots.map(([t,c])=>`<i class="${c}${t===XS?' x0':''}" title="${hh(t)}"></i>`).join('')}</div>`;
+   if(!vis.length)mu.insertAdjacentHTML('beforeend',`<div class="empty">${items.length?'Sin citas para los filtros aplicados':'Muelle libre – sin asignaciones'}</div>`);
+   vis.forEach(i=>{
+     const e=est(i),ex=isExtra(i),el=document.createElement('div');
+     if(!i.cita){el.className='it ev';el.innerHTML=`<span class="h">${hh(i.h)}–${hh(i.h+i.s)}</span><span class="p">${i.label}</span><div class="a"><button data-id="${i.id}">✎ Editar</button><button data-del="${i.id}">🗑 Quitar</button></div>`}
+     else{el.className='it';el.style.setProperty('--sc',ST[e]);
+      el.innerHTML=`<span class="h">${hh(i.h)}–${hh(i.h+i.s)}</span><span class="p"${i.label==='POR ASIGNAR'?' style="font-size:13px;color:var(--warn)"':''}>${i.label}</span><span class="st">${e}</span>
+      <div class="d"><b>${i.id}</b>${ex?' · <b style="color:#7B2FF7">⏱ Tiempo extra</b>':''}${ex&&i.h+i.s>lim?` <b style="color:var(--magenta)">(excede autorización ${hh(lim)})</b>`:''} · Conductor: <b>${i.cond||'Sin registrar'}</b> · Vehículo: <b>${i.tipo}</b> · Operación: <b style="color:var(--azul)">${i.op||'Sin definir'}</b><br>Cliente: <b>ESENTTIA</b> · Producto/Remisión: <b>${i.prod||'Sin registrar'}</b></div>
+      <div class="a"><select data-qs="${i.id}" title="Cambiar estado">${ESTADOS.map(s=>`<option${s===e?' selected':''}>${s}</option>`).join('')}<option value="__auto">↺ Automático</option></select><button data-id="${i.id}">✎ Editar / cambiar muelle</button><button data-del="${i.id}">🗑 Eliminar</button></div>`}
+     mu.appendChild(el)});
+   grid.appendChild(mu);
+  }
+  b.appendChild(sec);
+ }
+ if(!b.children.length)b.innerHTML='<div class="msg">Sin resultados para los filtros aplicados.</div>';
+}
+
+/* herramientas */
+const mv=n=>{const x=new Date(cur+'T12:00:00');x.setDate(x.getDate()+n);cur=key(x);render()};
+$('prev').onclick=()=>mv(-1);$('next').onclick=()=>mv(1);$('today').onclick=()=>{cur=real;render()};
+$('fecha').onchange=e=>{if(e.target.value){cur=e.target.value;render()}};
+$('q').oninput=render;$('fop').onchange=render;$('fmu').onchange=render;$('print').onclick=()=>window.print();
+$('fmu').innerHTML='<option value="all">Todos los muelles</option>'+BODS.flatMap(b=>MUS.map(m=>`<option value="${b}|${m}">Bodega ${b} – Muelle ${m}</option>`)).join('');
+$('chips').onclick=e=>{const c=e.target.closest('.chip');if(c){fest=c.dataset.f;render()}};
+const thm=()=>{try{return localStorage.getItem('serpomar_theme')}catch(e){return null}};
+function setTheme(dk){document.body.classList.toggle('dark',dk);$('theme').textContent=dk?'☀ Modo claro':'🌙 Modo oscuro';try{localStorage.setItem('serpomar_theme',dk?'dark':'light')}catch(e){}}
+$('theme').onclick=()=>setTheme(!document.body.classList.contains('dark'));
+setTheme(thm()==='dark');
+window.addEventListener('beforeprint',()=>document.body.classList.remove('dark'));
+window.addEventListener('afterprint',()=>document.body.classList.toggle('dark',thm()==='dark'));
+
+/* persistencia */
+const sv_=()=>{try{localStorage.setItem('serpomar_citas_v2',JSON.stringify({DB,EX}))}catch(e){}};
+try{const raw=localStorage.getItem('serpomar_citas_v2'),s=raw?JSON.parse(raw):null;
+ if(s&&s.DB){Object.keys(DB).forEach(k=>delete DB[k]);Object.assign(DB,s.DB);Object.assign(EX,s.EX||{})}
+ else{const o=JSON.parse(localStorage.getItem('serpomar_citas_v1')||'null');if(o){Object.keys(DB).forEach(k=>delete DB[k]);Object.assign(DB,o)}}}catch(e){}
+Object.values(DB).flat().forEach(i=>{if(MIG[i.man])i.man=MIG[i.man];if(!i.cita&&OPMAP[i.label]){i.cita=true;i.op=OPMAP[i.label];i.label='POR ASIGNAR'}});
+
+/* listas de formularios */
+const DUR=[];for(let n=.5;n<=6;n+=.5)DUR.push(n);DUR.push(7,8,9,10,11,12,13,14);
+const durOpts=()=>DUR.map(n=>`<option value="${n}">${fn(n)} h</option>`).join('')+`<option value="J">Toda la jornada (${hh(H0)}–${hh(XS)})</option>`;
+const strOpts=(()=>{let s='';for(let v=H0;v<H1;v+=.5)s+=`<option value="${v}">${hh(v)}</option>`;return s})();
+$('eb').innerHTML=BODS.map(b=>`<option>${b}</option>`).join('');$('em').innerHTML=MUS.map(m=>`<option>${m}</option>`).join('');
+$('eh').innerHTML=strOpts;$('ed').innerHTML=durOpts();$('lh').innerHTML=strOpts;$('ld').innerHTML=durOpts();
+$('eo').innerHTML=OPE.map(o=>`<option>${o}</option>`).join('');$('la').innerHTML=OPE.map(o=>`<option>${o}</option>`).join('');
+function setSel(id,v){const s=$(id);v=String(v);if(![...s.options].some(o=>o.value===v))s.insertAdjacentHTML('beforeend',`<option value="${v}">${fn(+v)} h</option>`);s.value=v}
+
+/* alta / edición */
+let sel=null;
+const tog=()=>{const c=$('ek').value==='c';$('lp').hidden=!c;$('lo').hidden=c;$('cf').style.display=c?'grid':'none'};
+$('ek').onchange=tog;
+function open_(it,pre){
+ sel=it;const n=!it;
+ $('dt').textContent=n?'Agregar cita u operación':'Editar registro';
+ $('dsub').textContent=n?`Fecha ${cur}`:`${it.id} · ${it.label}`;
+ const o=it||{b:pre.b,m:pre.m,h:12,s:1,label:'',cita:true,cond:'',tipo:'Sin registrar',op:'',prod:'',man:''};
+ $('dl').hidden=n;$('eop').value=o.op||'';
+ $('ek').value=o.cita?'c':'o';$('epl').value=o.cita&&o.label!=='POR ASIGNAR'?o.label:'';
+ if(!o.cita){if(!OPE.includes(o.label))$('eo').insertAdjacentHTML('beforeend',`<option>${o.label}</option>`);$('eo').value=o.label}
+ setSel('eh',o.h);setSel('ed',(!o.cita&&o.h===H0&&o.s===XS-H0)?'J':o.s);$('eb').value=o.b;$('em').value=o.m;
+ $('ec').value=o.cond;$('et').value=o.tipo;$('ep').value=o.prod;$('es').value=o.man;$('err').textContent='';tog();$('dlg').showModal();
+}
+$('nuevo').onclick=()=>open_(null,{b:BODS[0],m:1});
+let genB=BODS[0];
+$('board').onclick=e=>{
+ const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.add){const[b,m]=t.dataset.add.split('|');return open_(null,{b,m:+m})}
+ if(t.dataset.blk){const[b,m]=t.dataset.blk.split('|');DB[cur]=DB[cur]||[];
+  const c=DB[cur].find(i=>overlap(i,b,+m,H0,XS-H0));
+  if(c)return toast(`No se puede bloquear: ya hay "${c.label}" a las ${hh(c.h)}. Elimínelo o muévalo primero.`);
+  DB[cur].push({id:newId(cur),b,m:+m,h:H0,s:XS-H0,label:'BLOQUEADO',cita:false,cond:'',tipo:'Sin registrar',op:'',prod:'',man:''});
+  sv_();render();return toast(`Bodega ${b} · Muelle ${m} bloqueado toda la jornada`)}
+ if(t.dataset.gen){genB=t.dataset.gen;$('lsub').textContent=`Bodega ${genB} · ${cur}`;$('la').value='ALMUERZO';$('lw').value='b';$('lm').value='0';$('lh').value=12;setSel('ld',1);$('lerr').textContent='';return $('dlgL').showModal()}
+ const id=t.dataset.id||t.dataset.del;if(!id)return;
+ const it=DB[cur].find(i=>i.id===id);if(!it)return;
+ if(t.dataset.del){ask(`¿Eliminar "${it.label}" (${hh(it.h)}–${hh(it.h+it.s)}) del Muelle ${it.m} de la bodega ${it.b}?`,'Eliminar').then(ok=>{if(ok){DB[cur]=DB[cur].filter(i=>i!==it);sv_();render();toast('Registro eliminado')}});return}
+ open_(it);
+};
+$('board').onchange=e=>{const t=e.target;
+ if(t.dataset.qs){const it=DB[cur].find(i=>i.id===t.dataset.qs);it.man=t.value==='__auto'?'':t.value;sv_();render()}
+ else if(t.dataset.lim){(EX[cur]=EX[cur]||{})[t.dataset.lim]=+t.value;sv_();render()}};
+$('dl').onclick=async()=>{if(sel&&await ask(`¿Eliminar "${sel.label}" (${hh(sel.h)}–${hh(sel.h+sel.s)}) del Muelle ${sel.m} de la bodega ${sel.b}?`,'Eliminar')){DB[cur]=DB[cur].filter(i=>i!==sel);sv_();$('dlg').close();render();toast('Registro eliminado')}};
+$('cx').onclick=()=>$('dlg').close();
+$('sv').onclick=async()=>{
+ const c=$('ek').value==='c',b=$('eb').value,m=+$('em').value,J=$('ed').value==='J';
+ const h=J?H0:+$('eh').value,s=J?XS-H0:+$('ed').value;
+ const plate=$('epl').value.trim().toUpperCase();
+ const label=c?(plate||'POR ASIGNAR'):$('eo').value;
+ const er=x=>$('err').textContent=x;
+ if(c&&plate&&!PLATE.test(plate))return er('La placa debe tener 3 letras y 3 números (ej. ABC123), o déjela vacía si aún no está asignada.');
+ if(c&&!plate&&!$('eop').value)return er('Sin placa, indique la operación (exportación, traslado, orden de traída, cargue nacional o devolución).');
+ if(h+s>H1)return er(`La duración excede el horario operativo (hasta ${hh(H1)}).`);
+ DB[cur]=DB[cur]||[];
+ const clash=DB[cur].find(i=>i!==sel&&overlap(i,b,m,h,s));
+ if(clash)return er(`Conflicto: Bodega ${b} Muelle ${m} ya tiene "${clash.label}" a las ${hh(clash.h)}.`);
+ if(c&&h+s>XS&&h+s>limite(cur,b)){if(!await ask(`La cita termina a las ${hh(h+s)}, fuera del horario autorizado de la bodega ${b}. ¿Autorizar tiempo extra hasta las ${hh(Math.ceil(h+s))}?`,'Autorizar'))return;(EX[cur]=EX[cur]||{})[b]=Math.ceil(h+s)}
+ const vals={b,m,h,s,label,cita:c,cond:c?$('ec').value.trim():'',tipo:c?$('et').value:'Sin registrar',op:c?$('eop').value:'',prod:c?$('ep').value.trim():'',man:c?$('es').value:''};
+ if(sel)Object.assign(sel,vals);else DB[cur].push({id:newId(cur),...vals});
+ sv_();$('dlg').close();render();
+};
+/* almuerzo / bloqueo desde la bodega */
+$('lx').onclick=()=>$('dlgL').close();
+$('ls').onclick=()=>{
+ const J=$('ld').value==='J',h=J?H0:+$('lh').value,s=J?XS-H0:+$('ld').value,label=$('la').value;
+ if(h+s>H1)return $('lerr').textContent=`La duración excede el horario operativo (hasta ${hh(H1)}).`;
+ const bs=$('lw').value==='all'?BODS:[genB],ms=$('lm').value==='0'?MUS:[+$('lm').value];
+ DB[cur]=DB[cur]||[];let ok=0,sk=[];
+ bs.forEach(b=>ms.forEach(m=>{const c=DB[cur].find(i=>overlap(i,b,m,h,s));
+  if(c)sk.push(`${b}-M${m}`);else{DB[cur].push({id:newId(cur),b,m,h,s,label,cita:false,cond:'',tipo:'Sin registrar',op:'',prod:'',man:''});ok++}}));
+ sv_();$('dlgL').close();render();
+ toast(`${label}: ${ok} muelle(s) actualizados${sk.length?` · omitidos por conflicto: ${sk.join(', ')}`:''}`);
+};
+$('reset').onclick=async()=>{if(await ask('Se borrarán los cambios hechos en este navegador y se recargará la programación original del Excel. ¿Continuar?','Restablecer')){try{localStorage.removeItem('serpomar_citas_v1');localStorage.removeItem('serpomar_citas_v2')}catch(e){}location.reload()}};
+render();
+</script>
+</body>
+</html>
